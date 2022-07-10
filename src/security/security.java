@@ -5,11 +5,13 @@
  */
 package security;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class security extends javax.swing.JFrame {
-    String passwordEnc;
+    byte[] passwordEnc;
     String passwordDec;
     String password;
 
@@ -85,14 +87,13 @@ public class security extends javax.swing.JFrame {
         try {
             passwordEnc = AESencrp.encrypt(password);
             passwordDec = AESencrp.decrypt(passwordEnc);
+            String string = new String(passwordEnc,StandardCharsets.UTF_8);
+            System.out.println(string);
             System.out.println(passwordDec);
         } catch (Exception ex) {
             Logger.getLogger(security.class.getName()).log(Level.SEVERE, null, ex);
         }
-        StringBuilder array=new StringBuilder(passwordEnc);
-        array.deleteCharAt(23);
-        array.deleteCharAt(22);
-        resultTField.setText(array.toString());
+        resultTField.setText(passwordDec);
     }//GEN-LAST:event_passTextKeyReleased
     /**
      * @param args the command line arguments

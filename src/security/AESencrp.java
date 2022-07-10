@@ -6,36 +6,35 @@
 package security;
 
 import java.security.*;
+import java.util.Base64;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
-import sun.misc.*;
 
 public class AESencrp {
     
     private static final String ALGO = "AES";
     private static final byte[] keyValue ={0x55,0x47,0x55,0x52,0x5f,0x42,0x49,0x4c,0x49,0x53,0x49,0x4d,0x5f,0x53,0x59,0x53};
 
-public static String encrypt(String Data) throws Exception {
+public static byte[] encrypt(String Data) throws Exception {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
         byte[] encVal = c.doFinal(Data.getBytes());
-        String encryptedValue = new BASE64Encoder().encode(encVal);
-        return encryptedValue;
+        byte[] encryptValue = Base64.getEncoder().encode(encVal);
+        return encryptValue;
     }
 
-public static String decrypt(String encryptedData) throws Exception {
+public static String decrypt(byte[] encryptedData) throws Exception {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.DECRYPT_MODE, key);
-        byte[] decordedValue = new BASE64Decoder().decodeBuffer(encryptedData);
+        byte[] decordedValue = Base64.getDecoder().decode(encryptedData);
         byte[] decValue = c.doFinal(decordedValue);
         String decryptedValue = new String(decValue);
         return decryptedValue;
     }
 private static Key generateKey() throws Exception {
-        Key key = new SecretKeySpec(keyValue, ALGO);
-        return key;
+        return new SecretKeySpec(keyValue, ALGO);
 }
 
 }
